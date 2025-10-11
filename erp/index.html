@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern ERP Sistemi</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+    <div class="erp-container">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2>ERP System</h2>
+            </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li>
+                        <a href="#satis" class="menu-item"><i class="fa-solid fa-cart-shopping"></i> Satış <i class="fa-solid fa-chevron-down dropdown-icon"></i></a>
+                        <ul class="submenu">
+                            <li><a href="#" id="menu-nagd-satis">Nağd satış</a></li>
+                            <li><a href="#">Kredit satışı</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#odenis" class="menu-item"><i class="fa-solid fa-cash-register"></i> Ödəniş <i class="fa-solid fa-chevron-down dropdown-icon"></i></a>
+                         <ul class="submenu">
+                            <li><a href="#">Kassa mədaxil</a></li>
+                            <li><a href="#">Kassa gün sonu</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#hesabat" class="menu-item"><i class="fa-solid fa-chart-line"></i> Hesabat <i class="fa-solid fa-chevron-down dropdown-icon"></i></a>
+                         <ul class="submenu">
+                            <li><a href="#">Kassa hesabatı</a></li>
+                            <li><a href="#">Bank hesabatı</a></li>
+                        </ul>
+                    </li>
+                     <li>
+                        <a href="#tenzimlemeler" class="menu-item"><i class="fa-solid fa-cog"></i> Tənzimləmələr <i class="fa-solid fa-chevron-down dropdown-icon"></i></a>
+                         <ul class="submenu">
+                            <li><a href="#">Şifrə yeniləmələri</a></li>
+                            <li><a href="#">Mağaza yeniləmələri</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <header class="main-header">
+                <h1>Nağd Satış</h1>
+                <div class="user-profile">
+                    <i class="fa-solid fa-user-circle"></i>
+                    <span>Admin</span>
+                </div>
+            </header>
+
+            <div class="content-body" id="nagd-satis-page">
+                <div class="card">
+                    <h3 class="card-title">Məhsul Məlumatı</h3>
+                    <div class="form-group">
+                        <label for="product-code">Məhsul Kodu</label>
+                        <input type="text" id="product-code" placeholder="Məhsulun kodunu daxil edin...">
+                    </div>
+                    <div id="product-details" class="product-info">
+                        </div>
+                </div>
+
+                <div class="card">
+                    <h3 class="card-title">Müştəri Məlumatı</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="customer-code">Müştəri Kodu</label>
+                            <input type="text" id="customer-code" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="customer-name">Ad/Soyad/Ata adı</label>
+                            <input type="text" id="customer-name">
+                        </div>
+                         <div class="form-group">
+                            <label for="customer-fin">Fin Kod</label>
+                            <input type="text" id="customer-fin">
+                        </div>
+                         <div class="form-group">
+                            <label for="customer-phone">Mobil Nömrə</label>
+                            <input type="text" id="customer-phone">
+                        </div>
+                    </div>
+                     <div class="button-group">
+                        <button id="search-customer-btn" class="btn btn-secondary">Axtar</button>
+                        <button id="new-customer-btn" class="btn btn-primary">Yeni Müştəri</button>
+                    </div>
+                </div>
+
+                <div class="card sale-summary">
+                    <h3 class="card-title">Ümumi Məbləğ: <span id="total-price">0.00</span> AZN</h3>
+                    <button id="complete-sale-btn" class="btn btn-success btn-lg">Satışı Tamamla</button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div id="new-customer-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h2>Yeni Müştəri Qeydiyyatı</h2>
+            <form id="new-customer-form">
+                <div class="form-group">
+                    <label for="new-customer-name">Ad/Soyad/Ata adı</label>
+                    <input type="text" id="new-customer-name-modal" required>
+                </div>
+                <div class="form-group">
+                    <label for="new-customer-fin">Fin Kod</label>
+                    <input type="text" id="new-customer-fin-modal" required>
+                </div>
+                 <div class="form-group">
+                    <label for="new-customer-phone">Mobil Nömrə</label>
+                    <input type="text" id="new-customer-phone-modal" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Yadda Saxla</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
