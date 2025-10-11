@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Müştəri və Satış Sistemi</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        :root { --sidebar-bg: #1e293b; --sidebar-hover-bg: #334155; --sidebar-active-bg: #4f46e5; --text-primary: #f8fafc; --text-secondary: #cbd5e1; --main-bg: #f1f5f9; --content-text: #0f172a; --shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06); --border-color: #e2e8f0; --primary-color: #4f46e5; --primary-hover: #4338ca; --success-color: #22c55e; --success-hover: #16a34a; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { display: flex; background-color: var(--main-bg); color: var(--content-text); }
+        h1 { font-size: 24px; font-weight: 600; margin-bottom: 20px; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .sidebar { width: 260px; height: 100vh; background-color: var(--sidebar-bg); color: var(--text-primary); display: flex; flex-direction: column; padding: 15px 0; position: fixed; left: 0; top: 0; }
+        .sidebar-header { padding: 0 20px; margin-bottom: 25px; display: flex; align-items: center; }
+        .sidebar-header .logo-icon { font-size: 26px; color: var(--primary-color); margin-right: 15px; }
+        .sidebar-header h2 { font-weight: 600; font-size: 20px; }
+        .menu-list { list-style: none; flex-grow: 1; }
+        .menu-item { display: flex; align-items: center; padding: 14px 25px; color: var(--text-secondary); text-decoration: none; margin: 4px 15px; border-radius: 8px; font-weight: 500; cursor: pointer; transition: all 0.2s ease; }
+        .menu-item:hover { background-color: var(--sidebar-hover-bg); color: var(--text-primary); }
+        .menu-item.active { background-color: var(--primary-color); color: var(--text-primary); box-shadow: 0 4px 14px rgba(79, 70, 229, 0.3); }
+        .menu-item .menu-icon { font-size: 18px; width: 25px; margin-right: 20px; text-align: center; }
+        .main-content { flex-grow: 1; margin-left: 260px; padding: 30px; }
+        #content-area { animation: fadeIn 0.5s ease-out; }
+        .card { background: #fff; border-radius: 12px; padding: 25px; margin-bottom: 25px; box-shadow: var(--shadow); border: 1px solid var(--border-color); }
+        .card-title { font-size: 18px; font-weight: 600; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid var(--border-color); }
+        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
+        .form-group { margin-bottom: 10px; }
+        .form-group label { display: block; font-weight: 500; margin-bottom: 6px; font-size: 14px; }
+        .form-group input, .form-group select { width: 100%; padding: 10px; border: 1px solid var(--border-color); border-radius: 6px; font-size: 14px; transition: border-color 0.2s, box-shadow 0.2s; }
+        .form-group input:focus { border-color: var(--primary-color); box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1); outline: none; }
+        .btn { padding: 10px 20px; border: none; border-radius: 8px; font-weight: 500; cursor: pointer; transition: all 0.2s ease; font-size: 14px; }
+        .btn-primary { background-color: var(--primary-color); color: #fff; } .btn-primary:hover { background-color: var(--primary-hover); }
+        .btn-success { background-color: var(--success-color); color: #fff; } .btn-success:hover { background-color: var(--success-hover); }
+        .btn-full { width: 100%; } .btn:disabled { background-color: #9ca3af; cursor: not-allowed; }
+        .results-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        .results-table th, .results-table td { padding: 12px 15px; text-align: left; border-bottom: 1px solid var(--border-color); }
+        .results-table th { background-color: #f8fafc; font-weight: 600; font-size: 12px; text-transform: uppercase; color: #64748b; }
+        .results-table tr:hover { background-color: #f8fafc; }
+        #search-loader { width: 30px; height: 30px; border: 3px solid var(--border-color); border-top-color: var(--primary-color); border-radius: 50%; animation: spin 1s linear infinite; margin: 20px auto; }
+        .hidden { display: none; }
+        .calculation-box { background-color: #f8fafc; border: 1px solid var(--border-color); border-radius: 8px; padding: 15px; margin-top: 20px; text-align: center; }
+        .calculation-box span { display: block; font-size: 22px; font-weight: 700; color: var(--primary-color); }
+    </style>
+</head>
+<body>
+    <nav class="sidebar">
+        <div class="sidebar-header"><i class="fas fa-cubes logo-icon"></i><h2>Sistem</h2></div>
+        <ul class="menu-list">
+            <li><a class="menu-item" data-content="kredit-satisi"><i class="fas fa-cash-register menu-icon"></i> Kredit Satışı</a></li>
+            <li><a class="menu-item" data-content="musteri-analiz"><i class="fas fa-search menu-icon"></i> Müştəri Analizi</a></li>
+        </ul>
+    </nav>
+    <main class="main-content">
+        <div id="content-area"></div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycby7lQL5liZ2VNl5kuzBJPat7uCqOmOT-Hv9MaS4Sn7-_W6DG3qwZPu-0hB2gkLyWSuK/exec';
+            const contentArea = document.getElementById('content-area');
+            let currentCustomer = null;
+
+            function renderPage(contentId) {
+                const contentMap = {
+                    'musteri-analiz': {
+                        title: 'Müştəri Axtarışı',
+                        render: () => {
+                            contentArea.innerHTML = `
+                                <h1>Müştəri Axtarışı</h1>
+                                <div class="card">
+                                    <form id="customer-search-form" class="form-group">
+                                        <label for="search-term">Axtarış (Ad, FİN, Nömrə)</label>
+                                        <input type="text" id="search-term" placeholder="Məlumat daxil edin...">
+                                        <button type="submit" class="btn btn-primary" style="margin-top: 10px;">Axtar</button>
+                                    </form>
+                                </div>
+                                <div id="search-loader" class="hidden"></div>
+                                <div id="search-results"></div>`;
+                            
+                            document.getElementById('customer-search-form').addEventListener('submit', e => {
+                                e.preventDefault();
+                                const searchTerm = document.getElementById('search-term').value.trim();
+                                const loader = document.getElementById('search-loader');
+                                const resultsContainer = document.getElementById('search-results');
+                                resultsContainer.innerHTML = '';
+                                if (!searchTerm) return;
+                                loader.classList.remove('hidden');
+
+                                fetch(GAS_WEB_APP_URL, {
+                                    method: 'POST', body: JSON.stringify({ action: 'searchCustomers', payload: { term: searchTerm } })
+                                }).then(res => res.json()).then(result => {
+                                    loader.classList.add('hidden');
+                                    if (result.status === 'success' && result.data.length > 0) {
+                                        let tableHTML = '<div class="card"><table class="results-table"><thead><tr><th>Müştəri Adı</th><th>FİN Kod</th><th>Mobil Nömrə</th><th></th></tr></thead><tbody>';
+                                        result.data.forEach(customer => {
+                                            tableHTML += `<tr>
+                                                <td>${customer.fullName}</td>
+                                                <td>${customer.fin}</td>
+                                                <td>${customer.mobile}</td>
+                                                <td style="text-align: right;"><button class="btn btn-primary view-details-btn" data-customer='${JSON.stringify(customer)}'>Satış et</button></td>
+                                            </tr>`;
+                                        });
+                                        tableHTML += '</tbody></table></div>';
+                                        resultsContainer.innerHTML = tableHTML;
+
+                                        document.querySelectorAll('.view-details-btn').forEach(button => {
+                                            button.addEventListener('click', function() {
+                                                currentCustomer = JSON.parse(this.dataset.customer);
+                                                renderPage('kredit-satisi');
+                                            });
+                                        });
+                                    } else {
+                                        resultsContainer.innerHTML = '<div class="card"><p>Axtarışa uyğun müştəri tapılmadı.</p></div>';
+                                    }
+                                });
+                            });
+                        }
+                    },
+                    'kredit-satisi': {
+                        title: 'Kredit Satışı',
+                        render: () => {
+                            contentArea.innerHTML = `
+                                <h1>Kredit Satışı</h1>
+                                <div class="card">
+                                    <h2 class="card-title">1. Müştəri Məlumatları</h2>
+                                    <div id="customer-info-section"></div>
+                                </div>
+                                <div class="card">
+                                    <h2 class="card-title">2. Kredit Məlumatları</h2>
+                                    <form id="credit-sale-form">
+                                        <div class="form-grid">
+                                            <div class="form-group"><label for="productName">Məhsulun Adı</label><input type="text" id="productName" required></div>
+                                            <div class="form-group"><label for="totalPrice">Satış Qiyməti (AZN)</label><input type="number" id="totalPrice" required min="0" step="0.01"></div>
+                                            <div class="form-group"><label for="downPayment">İlkin Ödəniş (AZN)</label><input type="number" id="downPayment" required min="0" step="0.01"></div>
+                                            <div class="form-group"><label for="creditTerm">Kredit Müddəti (Ay)</label>
+                                                <select id="creditTerm"><option value="3">3</option><option value="6">6</option><option value="9">9</option><option value="12">12</option><option value="18">18</option></select>
+                                            </div>
+                                        </div>
+                                        <div class="calculation-box">Aylıq ödəniş: <span id="monthlyPayment">0.00 AZN</span></div>
+                                        <button type="submit" class="btn btn-success btn-full" style="margin-top: 20px;">Satışı Təsdiqlə</button>
+                                    </form>
+                                </div>`;
+
+                            const customerSection = document.getElementById('customer-info-section');
+                            if (currentCustomer) {
+                                customerSection.innerHTML = `<p><strong>Seçilmiş müştəri:</strong> ${currentCustomer.fullName} (FİN: ${currentCustomer.fin})</p><button id="change-customer-btn" class="btn btn-primary" style="margin-top:10px;">Müştərini Dəyiş</button>`;
+                                document.getElementById('change-customer-btn').addEventListener('click', () => { currentCustomer = null; renderPage('musteri-analiz'); });
+                            } else {
+                                customerSection.innerHTML = `
+                                    <p>Mövcud müştəri seçilməyib. Zəhmət olmasa yeni müştəri məlumatlarını daxil edin.</p>
+                                    <form id="new-customer-form" class="form-grid" style="margin-top:15px;">
+                                        <div class="form-group"><label>Ad, Soyad, Ata adı</label><input type="text" id="fullName" required></div>
+                                        <div class="form-group"><label>FİN Kod</label><input type="text" id="fin" required maxlength="7"></div>
+                                        <div class="form-group"><label>Vəsiqə Seriyası</label><input type="text" id="idSeries" required></div>
+                                        <div class="form-group"><label>Mobil Nömrə</label><input type="text" id="mobile" required></div>
+                                    </form>`;
+                            }
+
+                            const priceInput = document.getElementById('totalPrice');
+                            const downPaymentInput = document.getElementById('downPayment');
+                            const termSelect = document.getElementById('creditTerm');
+                            const monthlyPaymentSpan = document.getElementById('monthlyPayment');
+
+                            function calculate() {
+                                const price = parseFloat(priceInput.value) || 0;
+                                const downPayment = parseFloat(downPaymentInput.value) || 0;
+                                const term = parseInt(termSelect.value) || 1;
+                                if (price > 0 && price >= downPayment) {
+                                    monthlyPaymentSpan.innerText = ((price - downPayment) / term).toFixed(2) + ' AZN';
+                                } else {
+                                    monthlyPaymentSpan.innerText = '0.00 AZN';
+                                }
+                            }
+                            [priceInput, downPaymentInput, termSelect].forEach(el => el.addEventListener('input', calculate));
+
+                            document.getElementById('credit-sale-form').addEventListener('submit', async e => {
+                                e.preventDefault();
+                                const submitBtn = e.target.querySelector('button[type="submit"]');
+                                submitBtn.disabled = true;
+                                submitBtn.innerText = 'Emal edilir...';
+
+                                if (!currentCustomer) {
+                                    const newCustomerForm = document.getElementById('new-customer-form');
+                                    if (!newCustomerForm.checkValidity()) {
+                                        alert('Zəhmət olmasa yeni müştəri məlumatlarını tam doldurun.');
+                                        submitBtn.disabled = false; submitBtn.innerText = 'Satışı Təsdiqlə';
+                                        return;
+                                    }
+                                    const newCustomerData = {
+                                        customerId: 'CUST-' + Date.now(),
+                                        fullName: document.getElementById('fullName').value,
+                                        fin: document.getElementById('fin').value.toUpperCase(),
+                                        idSeries: document.getElementById('idSeries').value.toUpperCase(),
+                                        mobile: document.getElementById('mobile').value
+                                    };
+                                    const customerResult = await fetch(GAS_WEB_APP_URL, {
+                                        method: 'POST', body: JSON.stringify({ action: 'addCustomer', payload: newCustomerData })
+                                    }).then(res => res.json());
+
+                                    if(customerResult.status !== 'success') {
+                                        alert('Yeni müştəri yaradılarkən xəta baş verdi.');
+                                        submitBtn.disabled = false; submitBtn.innerText = 'Satışı Təsdiqlə';
+                                        return;
+                                    }
+                                    currentCustomer = customerResult.data;
+                                }
+
+                                const saleData = {
+                                    saleId: 'SALE-' + Date.now(),
+                                    customerId: currentCustomer.customerId,
+                                    productName: document.getElementById('productName').value,
+                                    totalPrice: parseFloat(priceInput.value),
+                                    downPayment: parseFloat(downPaymentInput.value),
+                                    creditTerm: parseInt(termSelect.value),
+                                    monthlyPayment: parseFloat(monthlyPaymentSpan.innerText)
+                                };
+
+                                const saleResult = await fetch(GAS_WEB_APP_URL, {
+                                    method: 'POST', body: JSON.stringify({ action: 'addCreditSale', payload: saleData })
+                                }).then(res => res.json());
+
+                                if(saleResult.status === 'success') {
+                                    alert('Kredit satışı uğurla qeydə alındı!');
+                                    currentCustomer = null;
+                                    renderPage('kredit-satisi');
+                                } else {
+                                    alert('Satış qeydə alınarkən xəta baş verdi.');
+                                    submitBtn.disabled = false; submitBtn.innerText = 'Satışı Təsdiqlə';
+                                }
+                            });
+                        }
+                    }
+                };
+
+                const page = contentMap[contentId];
+                if (page) {
+                    document.querySelectorAll('.menu-item').forEach(link => {
+                        link.classList.toggle('active', link.dataset.content === contentId);
+                    });
+                    page.render();
+                }
+            }
+
+            // Başlanğıc səhifəsi
+            renderPage('kredit-satisi');
+        });
+    </script>
+</body>
+</html>
