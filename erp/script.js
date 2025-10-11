@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
 
     // --- GOOGLE APPS SCRIPT URL ---
-    const WEB_APP_URL = 'YOUR_WEB_APP_URL'; // <-- BU HİSSƏNİ DƏYİŞƏCƏKSİNİZ!
+    const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxMa1jZrOm8jAem44VfM6w3IytbssPVcmwd0f6TNwIszT6_cVzrpwl2hCAnwf5worzoZQ/exec'; // <-- BU HİSSƏNİ DƏYİŞƏCƏKSİNİZ!
 
     // Elementlərin seçilməsi
     const productCodeInput = document.getElementById('product-code');
