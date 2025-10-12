@@ -797,7 +797,40 @@
         // Kredit forması funksiyaları (dəyişdirilməyib)
         function openNagdCekModal(musteri, faktura) { document.getElementById('nagdCekSatici').textContent = magazaAdi; document.getElementById('nagdCekId').textContent = faktura.fakturaId; document.getElementById('nagdCekTarix').textContent = new Date(faktura.tarix).toLocaleString('az-AZ'); document.getElementById('nagdCekMusteriAdi').textContent = `${getFullName(musteri)} (${musteri.musteriKodu})`; document.getElementById('nagdCekMehsulAdi').textContent = faktura.mehsul; document.getElementById('nagdCekOdenenMebleg').textContent = faktura.mebleg.toFixed(2); document.getElementById('nagdCekOdenisUsulu').textContent = faktura.usulText || faktura.usul; document.getElementById('nagdCekModal').style.display = 'block'; }
         function resetKreditFormCustomer(resetCheckbox = true) { document.getElementById('kreditMusteriId').value = ''; document.getElementById('selectedKreditCustomerInfo').style.display = 'none'; document.getElementById('kreditCustomerSearchArea').style.display = 'block'; document.getElementById('kreditMusteriAxtarInput').value = ''; document.getElementById('kreditMusteriAxtarNeticeleri').style.display = 'none'; const fieldsToReset = ['ad', 'soyad', 'ataAdi', 'finKod', 'vesiqeNomre', 'mobil1-nomre', 'mobil2-nomre', 'mobil3-nomre']; fieldsToReset.forEach(id => { const el = document.getElementById(id); el.value = ''; el.readOnly = false; }); document.getElementById('cins').disabled = false; document.getElementById('vesiqeSeria').disabled = false; document.getElementById('mobil1-prefix').disabled = false; document.getElementById('mobil2-prefix').disabled = false; document.getElementById('mobil3-prefix').disabled = false; if(resetCheckbox) { document.getElementById('yeniKreditMusteriCheckbox').checked = true; document.getElementById('yeniKreditMusteriFormu').style.display = 'block'; document.getElementById('movcudKreditMusteriFormu').style.display = 'none'; toggleKreditFormRequired(false); } }
-        function handleKreditMusteriSearch() { const searchTerm = document.getElementById('kreditMusteriAxtarInput').value.toLowerCase().trim(); const neticeler = document.getElementById('kreditMusteriAxtarNeticeleri'); if (searchTerm.length < 2) { neticeler.style.display = 'none'; return; } const tapilanlar = musteriler.filter(m => (getFullName(m).toLowerCase().includes(searchTerm)) || (m.musteriKodu && m.musteriKodu.toLowerCase().includes(searchTerm)) || (m.finKod && m.finKod.toLowerCase().includes(searchTerm)) || (m.nomreler && m.nomreler.some(n => n.includes(searchTerm))) ); const cedvel = document.getElementById('kreditMusteriAxtarCedveli'); cedvel.innerHTML = ''; if (tapilanlar.length > 0) { tapilanlar.forEach(musteri => { const tr = `<tr><td>${getFullName(musteri)} <span class="customer-code">${musteri.musteriKodu}</span></td><td>${musteri.finKod || '---'}</td><td>${(musteri.nomreler || []).join(', ')}</td><td><button type="button" class="action-btn select-customer-btn" data-id="${musteri.id}">Seç</button></td></tr>`; cedvel.innerHTML += tr; }); neticeler.style.display = 'block'; } else { cedvel.innerHTML = `<tr><td colspan="4" style="text-align:center;">Müştəri tapılmadı.</td></tr>`; neticeler.style.display = 'block'; } }
+        function handleKreditMusteriSearch() {
+    const searchTerm = document.getElementById('kreditMusteriAxtarInput').value.toLowerCase().trim();
+    const neticelerContainer = document.getElementById('kreditMusteriAxtarNeticeleri');
+    const cedvelBody = document.getElementById('kreditMusteriAxtarCedveli');
+    
+    cedvelBody.innerHTML = ''; // Hər axtarışdan əvvəl köhnə nəticələri təmizləyirik
+
+    if (searchTerm.length < 2) {
+        neticelerContainer.style.display = 'none';
+        return;
+    }
+
+    const tapilanlar = musteriler.filter(m =>
+        (getFullName(m).toLowerCase().includes(searchTerm)) ||
+        (m.musteriKodu && m.musteriKodu.toLowerCase().includes(searchTerm)) ||
+        (m.finKod && m.finKod.toLowerCase().includes(searchTerm)) ||
+        (m.nomreler && m.nomreler.some(n => n.includes(searchTerm)))
+    );
+
+    if (tapilanlar.length > 0) {
+        tapilanlar.forEach(musteri => {
+            const tr = `<tr>
+                <td>${getFullName(musteri)} <span class="customer-code">${musteri.musteriKodu}</span></td>
+                <td>${musteri.finKod || '---'}</td>
+                <td>${(musteri.nomreler || []).join(', ')}</td>
+                <td><button type="button" class="action-btn select-customer-btn" data-id="${musteri.id}">Seç</button></td>
+            </tr>`;
+            cedvelBody.innerHTML += tr;
+        });
+    } else {
+        cedvelBody.innerHTML = `<tr><td colspan="4" style="text-align:center;">Müştəri tapılmadı.</td></tr>`;
+    }
+    neticelerContainer.style.display = 'block';
+}
         function handleSelectKreditMusteri(e) { if (e.target.classList.contains('select-customer-btn')) { const id = parseInt(e.target.dataset.id); const musteri = musteriler.find(m => m.id === id); if (musteri) { document.getElementById('kreditMusteriId').value = musteri.id; document.getElementById('selectedKreditCustomerInfo').innerHTML = `<p><strong>Seçilmiş Müştəri:</strong> ${getFullName(musteri)} (${musteri.musteriKodu}) <button type="button" class="action-btn" onclick="resetKreditFormCustomer()">Ləğv et</button></p>`; document.getElementById('selectedKreditCustomerInfo').style.display = 'block'; document.getElementById('kreditCustomerSearchArea').style.display = 'none'; document.getElementById('kreditMusteriAxtarNeticeleri').style.display = 'none'; fillAndLockKreditForm(musteri); } } }
         function fillAndLockKreditForm(musteri) { document.getElementById('ad').value = musteri.ad; document.getElementById('soyad').value = musteri.soyad; document.getElementById('ataAdi').value = musteri.ataAdi; document.getElementById('cins').value = musteri.cins || 'Kişi'; document.getElementById('finKod').value = musteri.finKod; const [seria, ...nomreParts] = (musteri.vesiqeSeria || '').split(' '); const nomre = nomreParts.join(''); document.getElementById('vesiqeSeria').value = seria || 'AZE'; document.getElementById('vesiqeNomre').value = nomre || ''; const nomreler = musteri.nomreler || []; if(nomreler[0]) { document.getElementById('mobil1-prefix').value = nomreler[0].substring(0, 3); document.getElementById('mobil1-nomre').value = nomreler[0].substring(3); } if(nomreler[1]) { document.getElementById('mobil2-prefix').value = nomreler[1].substring(0, 3); document.getElementById('mobil2-nomre').value = nomreler[1].substring(3); } if(nomreler[2]) { document.getElementById('mobil3-prefix').value = nomreler[2].substring(0, 3); document.getElementById('mobil3-nomre').value = nomreler[2].substring(3); } const fieldsToLock = ['ad', 'soyad', 'ataAdi', 'finKod', 'vesiqeNomre', 'mobil1-nomre', 'mobil2-nomre', 'mobil3-nomre']; fieldsToLock.forEach(id => document.getElementById(id).readOnly = true); document.getElementById('cins').disabled = true; document.getElementById('vesiqeSeria').disabled = true; document.getElementById('mobil1-prefix').disabled = true; document.getElementById('mobil2-prefix').disabled = true; document.getElementById('mobil3-prefix').disabled = true; document.getElementById('yeniKreditMusteriFormu').style.display = 'block'; }
         function toggleKreditFormRequired(isExisting) { const fields = ['ad', 'soyad', 'ataAdi', 'finKod', 'vesiqeNomre', 'mobil1-nomre']; fields.forEach(id => { document.getElementById(id).required = !isExisting; }); }
