@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>İdarəetmə Paneli</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="main-container">
+        <nav class="sidebar">
+            <h3>Kredit Sistemi</h3>
+            <ul>
+                <li><a href="dashboard.html" class="active">İdarəetmə Paneli</a></li>
+                <li><a href="customers.html">Müştərilər</a></li>
+                <li><a href="loans.html">Kreditlər</a></li>
+                <li><a href="reports.html">Hesabatlar</a></li>
+                <li><a href="#" id="logoutBtn">Çıxış</a></li>
+            </ul>
+        </nav>
+        <main class="content">
+            <header>
+                <h1>Xoş Gəldiniz!</h1>
+            </header>
+            <section class="stats">
+                <div class="stat-card">
+                    <h4>Ümumi Müştərilər</h4>
+                    <p id="totalCustomers">0</p>
+                </div>
+                <div class="stat-card">
+                    <h4>Aktiv Kreditlər</h4>
+                    <p id="activeLoans">0</p>
+                </div>
+                <div class="stat-card">
+                    <h4>Ümumi Məbləğ (AZN)</h4>
+                    <p id="totalLoanAmount">0.00</p>
+                </div>
+                <div class="stat-card">
+                    <h4>Gecikmədə Olanlar</h4>
+                    <p id="overdueLoans">0</p>
+                </div>
+            </section>
+            <section>
+                <h2>Son Əməliyyatlar</h2>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Müştəri</th>
+                                <th>Məbləğ (AZN)</th>
+                                <th>Tarix</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="recentActivity">
+                            </tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+    </div>
+    <script src="js/database.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/dashboard.js"></script>
+</body>
+</html>
