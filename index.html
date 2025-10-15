@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+    <meta charset="UTF-8">
+    <title>Giriş - Kredit Sistemi</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Kredit İdarəetmə Sisteminə Giriş</h1>
+        <form id="loginForm">
+            <label for="email">E-poçt:</label>
+            <input type="email" id="email" required>
+            <label for="password">Şifrə:</label>
+            <input type="password" id="password" required>
+            <button type="submit">Daxil Ol</button>
+        </form>
+        <p id="error-message" class="error"></p>
+    </div>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
