@@ -1,11 +1,11 @@
 // BURA FIREBASE-DƏN GÖTÜRDÜYÜNÜZ KODU YAPIŞDIRIN
 const firebaseConfig = {
-  apiKey: "AIzaSy...",
-  authDomain: "sizin-proyekt.firebaseapp.com",
-  projectId: "sizin-proyekt",
-  storageBucket: "sizin-proyekt.appspot.com",
-  messagingSenderId: "...",
-  appId: "..."
+  apiKey: "AIzaSyBWy_6SlyUfp4br0G1lkKOpqubuh8-3zvQ",
+  authDomain: "kredit-sistemi-arzu.firebaseapp.com",
+  projectId: "kredit-sistemi-arzu",
+  storageBucket: "kredit-sistemi-arzu.firebasestorage.app",
+  messagingSenderId: "288244259599",
+  appId: "1:288244259599:web:85ca5aedb0010210bdbc7a"
 };
 
 // Firebase-i başladırıq
